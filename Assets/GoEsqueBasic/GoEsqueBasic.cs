@@ -80,7 +80,7 @@ namespace SamizdatEngine.GE.Basic
             intersections = new Dictionary<string, Intersection>();
             stones = new Dictionary<Intersection, Stone>();
             serialization = new Dictionary<int, string>();
-            tileShape = TileShape.SQUARE;
+            tileShape = TileShape.HEX;
             drawer = _drawer;
             uihandler = _geui;
             //InitializeGame(new int[] { 19, 19 });
@@ -125,6 +125,10 @@ namespace SamizdatEngine.GE.Basic
                 if (tileShape == TileShape.SQUARE)
                 {
                     i.neighbors = SetNeighborsSquare(i, intersections, false);
+                }
+                else
+                {
+                    i.neighbors = SetNeighborsHex(i, intersections);
                 }
             }
         }
@@ -317,6 +321,54 @@ namespace SamizdatEngine.GE.Basic
             }
             return neighbors;
         }
+        List<Pos> SetNeighborsHex(Intersection p, Dictionary<string, Intersection> map, bool _wrapEastWest = false, bool _wrapNorthSouth = false)
+        {
+            List<Pos> neighbors = new List<Pos>();
+
+            List<int[]> hexNeighbors = new List<int[]>();
+            if (p.pos.gridLoc.y() % 2 == 0)
+            {
+                hexNeighbors.Add(new int[] { 1, 0 });
+                hexNeighbors.Add(new int[] { 1, -1 });
+                hexNeighbors.Add(new int[] { 0, -1 });
+                hexNeighbors.Add(new int[] { -1, 0 });
+                hexNeighbors.Add(new int[] { 0, 1 });
+                hexNeighbors.Add(new int[] { 1, 1 });
+            }
+            else
+            {
+
+                hexNeighbors.Add(new int[] { 1, 0 });
+                hexNeighbors.Add(new int[] { -1, -1 });
+                hexNeighbors.Add(new int[] { 0, -1 });
+                hexNeighbors.Add(new int[] { -1, 0 });
+                hexNeighbors.Add(new int[] { 0, 1 });
+                hexNeighbors.Add(new int[] { -1, 1 });
+            }
+
+
+            float x = p.pos.gridLoc.x();
+            float y = p.pos.gridLoc.y();
+            for (int k = 0; k < hexNeighbors.Count; k++)
+            {
+                int i = hexNeighbors[k][0];
+                int j = hexNeighbors[k][1];
+                float X = _wrapEastWest ? (dims[0] + x + i) % dims[0] : x + i;
+                float Y = _wrapNorthSouth ? (dims[1] + y + j) % dims[1] : y + j;
+
+                Loc l2 = new Loc(X, Y);
+                if (map.ContainsKey(l2.key()))
+                {
+                    neighbors.Add(map[l2.key()].pos);
+                }
+                else
+                {
+                    Debug.Log("Map doesn't contain " + l2.x() + "," + l2.y());
+                }
+            }
+
+            return neighbors;
+        }
 
         public Dictionary<Intersection, Player> GetTerritories()
         {
@@ -485,7 +537,7 @@ namespace SamizdatEngine.GE.Basic
         public StoneBasic(Intersection _intersection, GoEsque _game)
         {
             intersection = _intersection;
-            liberties = 4 - Pos.EdgeCount(intersection.pos, _game.dims);
+            liberties = intersection.neighbors.Count - Pos.EdgeCount(intersection.pos, _game.dims);
             Stone stone = this;
             _game.stones[intersection] = stone;
             _game.intersections[intersection.pos.gridLoc.key()].occupant = stone;
