@@ -14,7 +14,7 @@ namespace SamizdatEngine.Linguistics
         public static List<string> AllVowels()
         {
             return new List<string>
-        {"A","AA","E","EE","I","II","O","OO","U","UU"};
+        {"A","AE","E","EE", "EA", "I", "IA", "AI", "IE", "EI","O","OO", "OA", "AO", "OE", "EO", "OI", "IO", "U", "UE", "UI", "UA", "AU", "OU"};
         }
         public static List<string> SelectSubset(List<string> list, int n)
         {
@@ -36,7 +36,6 @@ namespace SamizdatEngine.Linguistics
         }
         public static List<string> GenerateWordsBasic(int nWords)
         {
-            Debug.Log("Generating " + nWords + " words");
             int nMorphemes = 50;
             List<string> morphemes = GenerateMorphemes(nMorphemes);
             List<string> words = new List<string>();
@@ -65,8 +64,8 @@ namespace SamizdatEngine.Linguistics
         public static string GenerateMorpheme(List<string> consonants, List<string> vowels, float pConsonantStart, float pConsonantEnd)
         {
             string morpheme = "";
-            float rStart = Random.Range(0.0f, 0.1f);
-            float rEnd = Random.Range(0.0f, 0.1f);
+            float rStart = Random.Range(0.0f, 1.0f);
+            float rEnd = Random.Range(0.0f, 1.0f);
             if (rStart < pConsonantStart)
             {
                 morpheme += consonants[Random.Range(0, consonants.Count)];

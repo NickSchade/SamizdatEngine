@@ -7,13 +7,16 @@ public class LinguisticsTester : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Debug.Log("Starting");
-        List<string> words = Linguistics.GenerateWordsBasic(20);
-        foreach(string s in words)
+        int iter = 5;
+        for (int j = 0; j < iter; j++)
         {
-            Debug.Log(char.ToUpper(s[0])+s.Substring(1).ToLower());
+            List<string> words = Linguistics.GenerateWordsBasic(5);
+            for (int i = 0; i < words.Count; i++)
+            {
+                words[i] = char.ToUpper(words[i][0]) + words[i].Substring(1).ToLower();
+            }
+            Debug.Log(string.Join(",", words.ToArray()));
         }
-        Debug.Log("Finished with "+ words.Count + " words");
 	}
 	
 	// Update is called once per frame
