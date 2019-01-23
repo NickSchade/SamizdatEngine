@@ -13,6 +13,8 @@ ExportedObj/
 .consulo/
 *.csproj
 *.unityproj
+*.blend[1-9]
+*.blend?
 *.sln
 *.suo
 *.tmp
