@@ -80,7 +80,7 @@ namespace SamizdatEngine.GE.Basic
             intersections = new Dictionary<string, Intersection>();
             stones = new Dictionary<Intersection, Stone>();
             serialization = new Dictionary<int, string>();
-            tileShape = TileShape.SQUARE;
+            tileShape = TileShape.HEX;
             drawer = _drawer;
             uihandler = _geui;
             //InitializeGame(new int[] { 19, 19 });
