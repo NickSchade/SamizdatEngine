@@ -16,12 +16,17 @@ public class bbUIHandler : MonoBehaviour {
 		
 	}
 
-    
+    public bool HandleUserInput()
+    {
+        bool updateMouse = HandleMouse();
+        bool updateKeys = HandleKeys();
+        return updateMouse || updateKeys;
+    }
 
-    public bool HandleMouse()
+    bool HandleClick()
     {
         bool updateClick = false;
-        
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit[] hits = Physics.RaycastAll(ray);
         if (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1))
@@ -29,15 +34,19 @@ public class bbUIHandler : MonoBehaviour {
             foreach (RaycastHit hit in hits)
             {
                 bbClickable clicked = hit.transform.gameObject.GetComponentInParent<bbClickable>();
-            
+
                 if (clicked != null)
                 {
                     //Debug.Log("Clicked " + clicked.pos.gridLoc.key());
                     updateClick = game.HandleClick(clicked.pos, Input.GetMouseButtonUp(0), Input.GetMouseButtonUp(1));
                 }
-               // Debug.Log("Hovering " + clicked.pos.gridLoc.key());
+                // Debug.Log("Hovering " + clicked.pos.gridLoc.key());
             }
         }
+        return updateClick;
+    }
+    void HandleScroll()
+    {
         var d = Input.GetAxis("Mouse ScrollWheel");
         if (d > 0f)
         {
@@ -47,7 +56,11 @@ public class bbUIHandler : MonoBehaviour {
         {
             Camera.main.GetComponent<Camera>().orthographicSize += 1;
         }
-        return updateClick;
+    }
+    public bool HandleMouse()
+    {
+        HandleScroll();
+        return HandleClick();
     }
     public bool HandleKeys()
     {

@@ -10,12 +10,11 @@ namespace BBMVP
         public Dictionary<string, bbPos> pathMap;
         public Dictionary<bbPos, bbStructure> structures;
         public Dictionary<bbPos, bbLand> lands;
-
-        int N = 5; // DIM = 1+2^N
+        
         public int dim;
         bool wrapEastWest, wrapNorthSouth;
 
-        public bbIsland(BaseBuilderMVP _game)
+        public bbIsland(BaseBuilderMVP _game, int N = 5)
         {
             wrapEastWest = true;
             wrapNorthSouth = true;
@@ -49,7 +48,7 @@ namespace BBMVP
         {
             Dictionary<bbPos, bbLand> landsDict = new Dictionary<bbPos, bbLand>();
 
-            MidpointDisplacement mpd = new MidpointDisplacement(N, wrapEastWest, wrapNorthSouth);
+            MidpointDisplacement mpd = new MidpointDisplacement(_N, wrapEastWest, wrapNorthSouth);
             float[,] elevation = mpd.Elevation;
             MapUtil.TransformMapMinMax(ref elevation, MapUtil.dNormalize);
             foreach (bbPos p in pm.Values)

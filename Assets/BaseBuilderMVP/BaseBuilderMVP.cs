@@ -30,7 +30,7 @@ namespace BBMVP
         public float lastTurn;
         public int turnNumber;
 
-        public TileShape tileShape = TileShape.HEX;
+        public TileShape tileShape = TileShape.SQUARE;
 
         public BaseBuilderMVP()
         {

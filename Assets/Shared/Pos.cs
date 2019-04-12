@@ -10,14 +10,18 @@ namespace SamizdatEngine
 
     public class Pos
     {
-        public Loc gridLoc; // the location on a "square grid"
-        public Loc mapLoc; // the location in physical space ie hex' mapLoc is ofset on odd rows, etc.
+        public Loc gridLoc { get; set; } // the location on a "square grid"
+        public Loc mapLoc { get; set; } // the location in physical space ie same for squares, but hex' mapLoc is offset on odd rows, etc.
         public List<Pos> neighbors { get; set; }
         public Vector3 gameLoc
         {
             get
             {
                 return (new Vector3(mapLoc.x(), mapLoc.z(), mapLoc.y()));
+            }
+            set
+            {
+
             }
         }
 

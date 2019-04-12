@@ -31,9 +31,8 @@ public class bbDrawer : MonoBehaviour
         goStructures = new Dictionary<bbStructure, GameObject>();
         init = false;
 	}
-    
 
-    public void DrawInit()
+    public void SetTile()
     {
         switch (game.tileShape)
         {
@@ -45,22 +44,33 @@ public class bbDrawer : MonoBehaviour
                 pfTile = pfTileHex;
                 break;
         }
-        DrawTakeTurn();
+    }
+
+    public void InitCamera()
+    {
         bbLoc MidLoc = new bbLoc(game.currentIsland.dim / 2 - 1, game.currentIsland.dim / 2 - 1);
         Vector3 p = goMap[game.currentIsland.pathMap[MidLoc.key()]].transform.position;
+        if (game.tileShape == TileShape.SQUARE)
+        {
+            Camera.main.transform.position = new Vector3(p.x, 1, p.z);
+            Camera.main.orthographicSize = game.currentIsland.dim / 1.75f;
+        }
+        else
+        {
+            Camera.main.transform.position = new Vector3(p.x * 3 / 2, 1, p.z * 3 / 2);
+            Camera.main.orthographicSize = (3 / 2) * game.currentIsland.dim / 1.75f;
+        }
+    }
+    
+
+    public void DrawInit()
+    {
+        SetTile();
+        DrawTakeTurn();
         if (!init)
         {
             init = true;
-            if (game.tileShape == TileShape.SQUARE)
-            {
-                Camera.main.transform.position = new Vector3(p.x, 1, p.z);
-                Camera.main.orthographicSize = game.currentIsland.dim / 1.75f;
-            }
-            else
-            {
-                Camera.main.transform.position = new Vector3(p.x * 3/2, 1, p.z * 3/2);
-                Camera.main.orthographicSize = (3/2) * game.currentIsland.dim / 1.75f;
-            }
+            InitCamera();
 
         }
         
